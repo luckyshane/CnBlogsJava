@@ -1,4 +1,4 @@
-package com.luckyshane.cnblogs.api;
+package com.luckyshane.cnblogs.model.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
@@ -6,10 +6,17 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class BlogApiClient {
     private static final String BASE_URL = "http://wcf.open.cnblogs.com/";
     private static Retrofit retrofit;
-
+    private static BlogApiService blogApiService;
 
     public static BlogApiService getApiService() {
-        return getRetrofit().create(BlogApiService.class);
+        if (blogApiService == null) {
+            synchronized (BlogApiClient.class) {
+                if (blogApiService == null) {
+                    blogApiService = getRetrofit().create(BlogApiService.class);
+                }
+            }
+        }
+        return blogApiService;
     }
 
     private static Retrofit getRetrofit() {

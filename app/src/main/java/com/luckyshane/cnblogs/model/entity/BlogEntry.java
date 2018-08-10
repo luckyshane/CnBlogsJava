@@ -1,4 +1,4 @@
-package com.luckyshane.cnblogs.model;
+package com.luckyshane.cnblogs.model.entity;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -9,10 +9,8 @@ public class BlogEntry {
     @Element(name = "id")
     public String id;
 
-
     @Element(name = "title")
     public String title;
-
 
     @Element(name = "summary")
     public String summary;
@@ -32,6 +30,8 @@ public class BlogEntry {
     @Element(name = "comments")
     public int commentCount;
 
+    @Element(name = "author")
+    public Author author;
 
     @Override
     public String toString() {
@@ -40,6 +40,7 @@ public class BlogEntry {
         stringBuilder.append("id: " + id + ", ");
         stringBuilder.append("title: " + title + ", ");
         stringBuilder.append("summary: " + summary + ", ");
+        stringBuilder.append("author: " + author + ", ");
         stringBuilder.append("publishedTimeStamp: " + publishedTimeStamp + ", ");
         stringBuilder.append("updateTimeStamp: " + updateTimeStamp + ", ");
         stringBuilder.append("raiseCount: " + raiseCount + ", ");

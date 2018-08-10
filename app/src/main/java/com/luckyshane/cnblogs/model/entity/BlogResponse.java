@@ -1,4 +1,4 @@
-package com.luckyshane.cnblogs.model;
+package com.luckyshane.cnblogs.model.entity;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;

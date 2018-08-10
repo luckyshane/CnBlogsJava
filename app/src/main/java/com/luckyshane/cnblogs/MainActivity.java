@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.luckyshane.cnblogs.api.BlogApiClient;
-import com.luckyshane.cnblogs.model.BlogEntry;
-import com.luckyshane.cnblogs.model.BlogResponse;
+import com.luckyshane.cnblogs.model.api.BlogApiClient;
+import com.luckyshane.cnblogs.model.entity.BlogEntry;
+import com.luckyshane.cnblogs.model.entity.BlogResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,25 +47,8 @@ public class MainActivity extends BaseActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        BlogApiClient.getApiService().getRecentBlogs(10).enqueue(new Callback<BlogResponse>() {
-            @Override
-            public void onResponse(Call<BlogResponse> call, Response<BlogResponse> response) {
-                BlogResponse blogResponse = response.body();
-                Log.d(TAG, "onResponse " + blogResponse.updateTimeStamp + ", title: " + blogResponse.title);
-                if (blogResponse.blogEntryList != null) {
-                    for (BlogEntry entry : blogResponse.blogEntryList) {
-                        Log.d(TAG, entry.toString());
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BlogResponse> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t);
-            }
-        });
-
     }
+
+
 
 }
