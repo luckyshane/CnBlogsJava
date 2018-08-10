@@ -5,11 +5,11 @@ import org.simpleframework.xml.Root;
 
 @Root(name = "author", strict = false)
 public class Author {
-    @Element(name = "name")
+    @Element(name = "name", required = false)
     public String name;
-    @Element(name = "uri")
+    @Element(name = "uri", required = false)
     public String uri;
-    @Element(name = "avatar")
+    @Element(name = "avatar", required = false)
     public String avatar;
 
     @Override

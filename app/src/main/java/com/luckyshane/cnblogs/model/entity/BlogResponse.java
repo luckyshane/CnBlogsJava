@@ -18,4 +18,20 @@ public class BlogResponse {
     @ElementList(name = "entry", inline = true)
     public List<BlogEntry> blogEntryList;
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("BlogResponse {");
+        sb.append("title: " + title + ", ");
+        sb.append("updated: " + updateTimeStamp + ", ");
+        if (blogEntryList != null) {
+            sb.append("blogEntryList: {");
+            for (BlogEntry entry : blogEntryList) {
+                sb.append(entry + "\n");
+            }
+            sb.append("}");
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 }
