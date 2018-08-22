@@ -21,7 +21,7 @@ public interface BlogApiService {
      * @param index 页索引。从1开始
      * @param pageSize 页大小
      */
-    @GET("blog/sitehome/recent/paged/{index}/{pageSize}")
+    @GET("blog/sitehome/paged/{index}/{pageSize}")
     Observable<BlogResponse> getRecentBlogsPage(@Path("index") int index, @Path("pageSize") int pageSize);
 
     /**

@@ -3,8 +3,10 @@ package com.luckyshane.cnblogs.model.entity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.io.Serializable;
+
 @Root(name = "entry", strict = false)
-public class BlogEntry {
+public class BlogEntry implements Serializable {
 
     @Element(name = "id")
     public String id;

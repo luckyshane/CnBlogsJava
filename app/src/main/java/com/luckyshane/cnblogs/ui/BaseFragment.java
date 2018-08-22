@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 public abstract class BaseFragment extends Fragment {
     protected Context context;
     protected View rootView = null;
     private Unbinder unbinder;
+    protected CompositeDisposable mCompositeDisposable;
+    protected String TAG = getClass().getSimpleName();
 
     @Override
     public void onAttach(Context context) {
@@ -44,11 +48,27 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
+        unSubscribe();
         super.onDestroyView();
         if (unbinder != null) {
             unbinder.unbind();
         }
     }
+
+    protected void addSubscribe(Disposable subscription) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = new CompositeDisposable();
+        }
+        mCompositeDisposable.add(subscription);
+    }
+
+
+    protected void unSubscribe() {
+        if (mCompositeDisposable != null) {
+            mCompositeDisposable.clear();
+        }
+    }
+
 
 
 }
