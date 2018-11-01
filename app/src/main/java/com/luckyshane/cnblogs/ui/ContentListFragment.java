@@ -5,13 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
 import com.luckyshane.cnblogs.R;
 import com.luckyshane.cnblogs.model.Injector;
 import com.luckyshane.cnblogs.model.entity.BlogEntry;
+import com.luckyshane.cnblogs.model.entity.Category;
 import com.luckyshane.cnblogs.ui.adapter.BlogAdapter;
 import com.luckyshane.cnblogs.util.JumpHelper;
 
@@ -19,12 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class ContentListFragment extends BaseFragment {
     private static final String KEY_CATEGORY_ID = "category_id";
+    private static final int PAGE_SIZE = 20;
     private int categoryId;
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -32,6 +33,9 @@ public class ContentListFragment extends BaseFragment {
     RecyclerView recyclerView;
     private BlogAdapter blogAdapter;
     private List<BlogEntry> mBlogEntryList = new ArrayList<>();
+    private boolean supportPaging;
+    private boolean isLoadingMore;
+    private int currentPage;
 
     public static ContentListFragment create(int categoryId) {
         ContentListFragment fragment = new ContentListFragment();
@@ -50,6 +54,11 @@ public class ContentListFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         categoryId = getArguments().getInt(KEY_CATEGORY_ID);
+        if (categoryId == Category.BLOG_HOME) {
+            supportPaging = true;
+        } else {
+            supportPaging = false;
+        }
     }
 
     @Override
@@ -64,30 +73,76 @@ public class ContentListFragment extends BaseFragment {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(blogAdapter);
-
+        if (supportPaging) {
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                    if (lastVisibleItem >= totalItemCount - 2 && dy > 0) { // 还剩2个Item时加载更多
+                        if (!isLoadingMore) {
+                            isLoadingMore = true;
+                            loadMore();
+                        }
+                    }
+                }
+            });
+        }
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadContents(categoryId, true);
+                loadContents();
             }
         });
-        loadContents(categoryId, false);
+        loadContents();
     }
 
-    private void loadContents(int categoryId, boolean forceUpdate) {
-        addSubscribe(Injector.getBlogProvider().getHomeBlogs(forceUpdate, 1, 25)
-                .subscribeOn(Schedulers.io())
+    private void loadContents() {
+        currentPage = 1;
+        Observable<List<BlogEntry>> api = null;
+        if (categoryId == Category.BLOG_HOME) {
+            api = Injector.getBlogProvider().getHomeBlogs(currentPage, PAGE_SIZE);
+        } else if (categoryId == Category.BLOG_TOP_RECOMM_10DAYS) {
+            api = Injector.getBlogProvider().getTopRecommPosts();
+        } else {
+            api = Injector.getBlogProvider().getTopViewPosts();
+        }
+        addSubscribe(api.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<BlogEntry>>() {
+                .subscribe(new io.reactivex.functions.Consumer<List<BlogEntry>>() {
                     @Override
                     public void accept(List<BlogEntry> blogEntries) throws Exception {
                         showContent(blogEntries);
                     }
-                }, new Consumer<Throwable>() {
+                }, new io.reactivex.functions.Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.d(TAG, "loadContents", throwable);
                         onLoadError(throwable);
+                    }
+                }));
+    }
+
+    private void loadMore() {
+        addSubscribe(Injector.getBlogProvider().getHomeBlogs(currentPage + 1, PAGE_SIZE)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new io.reactivex.functions.Consumer<List<BlogEntry>>() {
+                    @Override
+                    public void accept(List<BlogEntry> blogEntries) throws Exception {
+                        if (!blogEntries.isEmpty()) {
+                            currentPage++;
+                            mBlogEntryList.addAll(blogEntries);
+                            blogAdapter.setDataList(mBlogEntryList);
+                            blogAdapter.notifyDataSetChanged();
+                        }
+                        isLoadingMore = false;
+
+                    }
+                }, new io.reactivex.functions.Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        isLoadingMore = false;
                     }
                 }));
     }
@@ -109,9 +164,6 @@ public class ContentListFragment extends BaseFragment {
     private void showBlogDetailPage(BlogEntry blogEntry) {
         JumpHelper.openBlogDetailPage(context, blogEntry);
     }
-
-
-
 
 
 }

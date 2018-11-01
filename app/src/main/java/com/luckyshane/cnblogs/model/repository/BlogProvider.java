@@ -4,6 +4,7 @@ import com.luckyshane.cnblogs.model.api.BlogApiClient;
 import com.luckyshane.cnblogs.model.api.cache.CacheHelper;
 import com.luckyshane.cnblogs.model.entity.BlogEntry;
 import com.luckyshane.cnblogs.model.entity.BlogResponse;
+import com.luckyshane.cnblogs.model.entity.Category;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,11 +28,56 @@ public class BlogProvider {
                 new DynamicKey(String.format(Locale.US, "%d-%d", pageIndex, pageSize)), new EvictDynamicKey(forceUpdate));
     }
 
+    public Observable<List<BlogEntry>> getHomeBlogs(int pageIndex, int pageSize) {
+        return BlogApiClient.getApiService().getRecentBlogsPage(pageIndex, pageSize)
+                .map(new Function<BlogResponse, List<BlogEntry>>() {
+                    @Override
+                    public List<BlogEntry> apply(BlogResponse blogResponse) throws Exception {
+                        return blogResponse.blogEntryList;
+                    }
+                });
+    }
+
+    public Observable<List<BlogEntry>> getBlogs(int categoryId, int pageIndex, int pageSize) {
+        Observable<List<BlogEntry>> result = null;
+        switch (categoryId) {
+            case Category.BLOG_HOME:
+                result = getHomeBlogs(pageIndex, pageSize);
+                break;
+            case Category.BLOG_TOP_RECOMM_10DAYS:
+                break;
+            case Category.BLOG_TOP_VIEW_48HOURS:
+                break;
+            default:
+                throw new IllegalArgumentException("");
+        }
+        return result;
+    }
+
+    public Observable<List<BlogEntry>> getTopRecommPosts() {
+        return BlogApiClient.getApiService().getTopRecommendPosts(25)
+                .map(new Function<BlogResponse, List<BlogEntry>>() {
+                    @Override
+                    public List<BlogEntry> apply(BlogResponse blogResponse) throws Exception {
+                        return blogResponse.blogEntryList;
+                    }
+                });
+    }
+
+    public Observable<List<BlogEntry>> getTopViewPosts() {
+        return BlogApiClient.getApiService().getTopViewPosts(25)
+                .map(new Function<BlogResponse, List<BlogEntry>>() {
+                    @Override
+                    public List<BlogEntry> apply(BlogResponse blogResponse) throws Exception {
+                        return blogResponse.blogEntryList;
+                    }
+                });
+    }
+
     public Observable<String> getBlogContent(String blogId, String timeStamp) {
         Observable<String> remote = BlogApiClient.getApiService().getBlogContent(blogId);
         return CacheHelper.getInstance().getBlogContent(remote, new DynamicKey(blogId + timeStamp));
     }
-
 
 
 }
