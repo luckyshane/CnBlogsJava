@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 import com.luckyshane.cnblogs.R;
 import com.luckyshane.cnblogs.model.Injector;
 import com.luckyshane.cnblogs.model.entity.BlogEntry;
@@ -72,6 +73,7 @@ public class ContentListFragment extends BaseFragment {
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        RecyclerViewDivider.with(context).drawable(getResources().getDrawable(R.drawable.comm_divider)).build().addTo(recyclerView);
         recyclerView.setAdapter(blogAdapter);
         if (supportPaging) {
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
