@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 import com.luckyshane.cnblogs.R;
 import com.luckyshane.cnblogs.model.Injector;
+import com.luckyshane.cnblogs.model.db.DBHelper;
 import com.luckyshane.cnblogs.model.entity.BlogEntry;
 import com.luckyshane.cnblogs.model.entity.Category;
 import com.luckyshane.cnblogs.ui.adapter.BlogAdapter;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class ContentListFragment extends BaseFragment {
@@ -65,11 +67,17 @@ public class ContentListFragment extends BaseFragment {
     @Override
     protected void initEventAndData() {
         mBlogEntryList.clear();
-        blogAdapter = new BlogAdapter(mBlogEntryList);
+        blogAdapter = new BlogAdapter(mBlogEntryList, context);
         blogAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showBlogDetailPage(mBlogEntryList.get(position));
+                BlogEntry entry = mBlogEntryList.get(position);
+                showBlogDetailPage(entry);
+                if (!entry.isRead) {
+                    entry.isRead = true;
+                    blogAdapter.notifyItemChanged(position);
+                    DBHelper.getInstance().insertReadBlogId(entry.id);
+                }
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -110,7 +118,9 @@ public class ContentListFragment extends BaseFragment {
         } else {
             api = Injector.getBlogProvider().getTopViewPosts();
         }
-        addSubscribe(api.subscribeOn(Schedulers.io())
+        addSubscribe(api
+                .map(new ReadStateMap())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new io.reactivex.functions.Consumer<List<BlogEntry>>() {
                     @Override
@@ -127,6 +137,7 @@ public class ContentListFragment extends BaseFragment {
 
     private void loadMore() {
         addSubscribe(Injector.getBlogProvider().getHomeBlogs(currentPage + 1, PAGE_SIZE)
+                .map(new ReadStateMap())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new io.reactivex.functions.Consumer<List<BlogEntry>>() {
@@ -148,6 +159,21 @@ public class ContentListFragment extends BaseFragment {
                     }
                 }));
     }
+
+    private class ReadStateMap implements Function<List<BlogEntry>, List<BlogEntry>> {
+
+        @Override
+        public List<BlogEntry> apply(List<BlogEntry> blogEntries) throws Exception {
+            if (blogEntries != null) {
+                List<String> readIs = DBHelper.getInstance().getAllReadIds();
+                for (BlogEntry blogEntry : blogEntries) {
+                    blogEntry.isRead = readIs.contains(blogEntry.id);
+                }
+            }
+            return blogEntries;
+        }
+    }
+
 
     private void showContent(List<BlogEntry> blogEntries) {
         if (swipeRefreshLayout.isRefreshing()) {

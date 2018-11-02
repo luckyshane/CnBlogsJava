@@ -35,6 +35,11 @@ public class BlogEntry implements Serializable {
     @Element(name = "author")
     public Author author;
 
+    /**
+     * 是否已经阅读过
+     */
+    public boolean isRead;
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

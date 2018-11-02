@@ -1,6 +1,8 @@
 package com.luckyshane.cnblogs.ui.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +22,11 @@ import butterknife.ButterKnife;
 public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.ViewHolder> {
     private List<BlogEntry> blogEntryList;
     private AdapterView.OnItemClickListener onItemClickListener;
+    private Context context;
 
-
-    public BlogAdapter(List<BlogEntry> blogEntries) {
+    public BlogAdapter(List<BlogEntry> blogEntries, Context context) {
         this.blogEntryList = blogEntries;
+        this.context = context;
     }
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
@@ -37,15 +40,16 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.ViewHolder> {
     @NonNull
     @Override
     public BlogAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View itemView = layoutInflater.inflate(R.layout.layout_blog_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BlogAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final BlogAdapter.ViewHolder holder, final int position) {
         BlogEntry entry = blogEntryList.get(position);
         holder.titleTv.setText(StringUtil.getEmptyIfNull(entry.title));
+        holder.titleTv.setTextColor(ContextCompat.getColor(context, entry.isRead ? R.color.text_read : R.color.text_normal));
         holder.summaryTv.setText(StringUtil.getEmptyIfNull(entry.summary));
         holder.authorTv.setText(StringUtil.getEmptyIfNull(entry.author.name));
         holder.commentTv.setText(String.valueOf(entry.commentCount));
@@ -54,7 +58,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(null, null, position, 0);
+                    onItemClickListener.onItemClick(null, null, holder.getAdapterPosition(), 0);
                 }
             }
         });

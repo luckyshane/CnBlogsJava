@@ -8,6 +8,6 @@
     <color name="text_light">#888888</color>
     <color name="text_light_plus">#BBBBBB</color>
     <color name="color_divider">#E0E0E0</color>
-
+    <color name="text_read">@color/text_light</color>
 
 </resources>

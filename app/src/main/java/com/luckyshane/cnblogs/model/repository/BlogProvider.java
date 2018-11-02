@@ -4,7 +4,6 @@ import com.luckyshane.cnblogs.model.api.BlogApiClient;
 import com.luckyshane.cnblogs.model.api.cache.CacheHelper;
 import com.luckyshane.cnblogs.model.entity.BlogEntry;
 import com.luckyshane.cnblogs.model.entity.BlogResponse;
-import com.luckyshane.cnblogs.model.entity.Category;
 
 import java.util.List;
 import java.util.Locale;
@@ -36,22 +35,6 @@ public class BlogProvider {
                         return blogResponse.blogEntryList;
                     }
                 });
-    }
-
-    public Observable<List<BlogEntry>> getBlogs(int categoryId, int pageIndex, int pageSize) {
-        Observable<List<BlogEntry>> result = null;
-        switch (categoryId) {
-            case Category.BLOG_HOME:
-                result = getHomeBlogs(pageIndex, pageSize);
-                break;
-            case Category.BLOG_TOP_RECOMM_10DAYS:
-                break;
-            case Category.BLOG_TOP_VIEW_48HOURS:
-                break;
-            default:
-                throw new IllegalArgumentException("");
-        }
-        return result;
     }
 
     public Observable<List<BlogEntry>> getTopRecommPosts() {
