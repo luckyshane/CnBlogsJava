@@ -31,6 +31,7 @@ public class BlogFragment extends BaseFragment {
     protected void initEventAndData() {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.removeAllTabs();
 
         categories.clear();
         fragments.clear();
@@ -39,10 +40,10 @@ public class BlogFragment extends BaseFragment {
         categories.add(new Category(Category.BLOG_TOP_RECOMM_10DAYS, AppUtil.getString(R.string.tab_blog_top_recomm_10days)));
 
         for (Category category : categories) {
-            fragments.add(ContentListFragment.create(category.id));
+            fragments.add(BlogListFragment.create(category.id));
             tabLayout.addTab(tabLayout.newTab().setText(category.name));
         }
-        TabFragmentAdapter adapter = new TabFragmentAdapter(getFragmentManager(), fragments);
+        TabFragmentAdapter adapter = new TabFragmentAdapter(getChildFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
         int index = 0;
         for (Category categoryBean : categories) {

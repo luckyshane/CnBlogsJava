@@ -6,9 +6,9 @@ import org.simpleframework.xml.Root;
 import java.util.List;
 
 @Root(name = "feed", strict = false)
-public class CommentResponse {
+public class NewsResponse {
 
     @ElementList(name = "entry", inline = true)
-    public List<CommentEntry> comments;
+    public List<NewsEntry> newsEntryList;
 
 }

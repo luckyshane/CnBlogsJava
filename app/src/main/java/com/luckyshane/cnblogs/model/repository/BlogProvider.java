@@ -62,5 +62,4 @@ public class BlogProvider {
         return CacheHelper.getInstance().getBlogContent(remote, new DynamicKey(blogId + timeStamp));
     }
 
-
 }

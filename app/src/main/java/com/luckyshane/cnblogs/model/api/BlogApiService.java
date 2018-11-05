@@ -2,6 +2,8 @@ package com.luckyshane.cnblogs.model.api;
 
 import com.luckyshane.cnblogs.model.entity.BlogResponse;
 import com.luckyshane.cnblogs.model.entity.CommentResponse;
+import com.luckyshane.cnblogs.model.entity.NewsContentResponse;
+import com.luckyshane.cnblogs.model.entity.NewsResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -9,12 +11,6 @@ import retrofit2.http.Path;
 
 public interface BlogApiService {
 
-
-    /**
-     * 获取首页文章列表
-     */
-    @GET("blog/sitehome/recent/{count}")
-    Observable<BlogResponse> getRecentBlogs(@Path("count") int count);
 
     /**
      * 分页获取首页文章列表
@@ -36,6 +32,8 @@ public interface BlogApiService {
     @GET("blog/TenDaysTopDiggPosts/{itemCount}")
     Observable<BlogResponse> getTopRecommendPosts(@Path("itemCount") int count);
 
+    @GET("blog/u/{blogApp}/posts/{pageIndex}/{pageSize}")
+    Observable<BlogResponse> getAuthorBlogs(@Path("blogApp") String blogApp, @Path("pageIndex") int pageIndex, @Path("pageSize") int pageSize);
 
     /**
      * 根据博客id获取博客内容
@@ -50,6 +48,29 @@ public interface BlogApiService {
      */
     @GET("blog/post/9446538/comments/{pageIndex}/{pageSize}")
     Observable<CommentResponse> getBlogComments(@Path("pageIndex") int pageIndex, @Path("pageSize") int pageSize);
+
+    /**
+     * 获取热门新闻
+     */
+    @GET("news/hot/{count}")
+    Observable<NewsResponse> getHotNews(@Path("count") int count);
+
+    /**
+     * 获取推荐新闻
+     */
+    @GET("news/recommend/paged/{pageIndex}/{pageSize}")
+    Observable<NewsResponse> getRecommNews(@Path("pageIndex") int pageIndex, @Path("pageSize") int pageSize);
+
+    /**
+     * 获取最新新闻
+     */
+    @GET("recent/paged/{pageIndex}/{pageSize}")
+    Observable<NewsResponse> getRecentNews(@Path("pageIndex") int pageIndex, @Path("pageSize") int pageSize);
+
+    @GET("/news/item/{id}")
+    Observable<NewsContentResponse> getNewsContent(@Path("id") String newsId);
+
+
 
 
 

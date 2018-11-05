@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -26,7 +27,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class ContentListFragment extends BaseFragment {
+public class BlogListFragment extends BaseFragment {
     private static final String KEY_CATEGORY_ID = "category_id";
     private static final int PAGE_SIZE = 20;
     private int categoryId;
@@ -40,8 +41,8 @@ public class ContentListFragment extends BaseFragment {
     private boolean isLoadingMore;
     private int currentPage;
 
-    public static ContentListFragment create(int categoryId) {
-        ContentListFragment fragment = new ContentListFragment();
+    public static BlogListFragment create(int categoryId) {
+        BlogListFragment fragment = new BlogListFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_CATEGORY_ID, categoryId);
         fragment.setArguments(bundle);
@@ -67,7 +68,7 @@ public class ContentListFragment extends BaseFragment {
     @Override
     protected void initEventAndData() {
         mBlogEntryList.clear();
-        blogAdapter = new BlogAdapter(mBlogEntryList, context);
+        blogAdapter = new BlogAdapter(context, mBlogEntryList);
         blogAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -186,6 +187,7 @@ public class ContentListFragment extends BaseFragment {
     }
 
     private void onLoadError(Throwable throwable) {
+        Log.e(TAG, "onLoadError", throwable);
         swipeRefreshLayout.setRefreshing(false);
     }
 

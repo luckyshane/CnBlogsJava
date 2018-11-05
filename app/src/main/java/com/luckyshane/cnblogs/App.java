@@ -1,13 +1,11 @@
 package com.luckyshane.cnblogs;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.blankj.utilcode.util.Utils;
 import com.luckyshane.cnblogs.model.db.entity.MyObjectBox;
 
 import io.objectbox.BoxStore;
-import io.objectbox.android.AndroidObjectBrowser;
 
 public class App extends Application {
     private static App instance;
@@ -20,8 +18,8 @@ public class App extends Application {
         Utils.init(this);
         boxStore = MyObjectBox.builder().androidContext(this).build();
         if (BuildConfig.DEBUG) {
-            boolean started = new AndroidObjectBrowser(boxStore).start(this);
-            Log.i("ObjectBrowser", "Started: " + started);
+            // boolean started = new AndroidObjectBrowser(boxStore).start(this);
+            // Log.i("ObjectBrowser", "Started: " + started);
         }
     }
 

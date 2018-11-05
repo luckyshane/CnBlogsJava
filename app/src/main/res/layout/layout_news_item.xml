@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp">
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextLineTitle"
+        android:text="首台基于三维芯片的光量子计算机系统问世" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/news_icon"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/summary_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/TextLineContent"
+            android:text="记者从上海交通大学获悉" />
+
+        <ImageView
+            android:id="@+id/news_icon_iv"
+            android:layout_width="@dimen/news_icon"
+            android:layout_height="@dimen/news_icon"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextLineSub"
+            android:text="昨天 17:20" />
+
+        <TextView
+            android:id="@+id/source_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextLineSub"
+            android:text="新浪科技"
+            android:layout_marginLeft="5dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/read_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextLineSub"
+            android:text="阅读·100"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/raise_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextLineSub"
+            android:text="点赞·10"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/comment_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextLineSub"
+            android:text="评论·10"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
+
+</LinearLayout>

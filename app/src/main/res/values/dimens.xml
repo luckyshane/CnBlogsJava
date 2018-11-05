@@ -5,6 +5,6 @@
     <dimen name="text_normal">14dp</dimen>
     <dimen name="text_plus">16dp</dimen>
     <dimen name="text_minor">12dp</dimen>
-
+    <dimen name="news_icon">100dp</dimen>
 
 </resources>

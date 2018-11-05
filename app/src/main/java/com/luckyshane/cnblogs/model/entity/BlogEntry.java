@@ -35,6 +35,9 @@ public class BlogEntry implements Serializable {
     @Element(name = "author")
     public Author author;
 
+    @Element(name = "blogapp", required = false)
+    public String blogApp;
+
     /**
      * 是否已经阅读过
      */

@@ -6,5 +6,8 @@
     <string name="tab_blog_home">首页</string>
     <string name="tab_blog_top_view_48hours">48小时阅读排行</string>
     <string name="tab_blog_top_recomm_10days">10天推荐排行</string>
+    <string name="tab_news_recent">最新</string>
+    <string name="tab_news_recomm">推荐</string>
+    <string name="tab_news_hot">热门</string>
 
 </resources>

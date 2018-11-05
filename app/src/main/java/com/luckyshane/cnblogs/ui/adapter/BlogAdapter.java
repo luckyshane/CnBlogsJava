@@ -24,7 +24,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.ViewHolder> {
     private AdapterView.OnItemClickListener onItemClickListener;
     private Context context;
 
-    public BlogAdapter(List<BlogEntry> blogEntries, Context context) {
+    public BlogAdapter(Context context, List<BlogEntry> blogEntries) {
         this.blogEntryList = blogEntries;
         this.context = context;
     }
