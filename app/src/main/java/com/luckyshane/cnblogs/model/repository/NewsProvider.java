@@ -5,6 +5,7 @@ import com.luckyshane.cnblogs.model.entity.NewsContentResponse;
 import com.luckyshane.cnblogs.model.entity.NewsEntry;
 import com.luckyshane.cnblogs.model.entity.NewsResponse;
 import com.luckyshane.cnblogs.util.DateUtil;
+import com.luckyshane.cnblogs.util.Parser;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class NewsProvider implements INewsProvider {
             for (NewsEntry entry : entries) {
                 entry.publishDate = DateUtil.parseUTCDateStr(entry.publishedTimeStamp);
                 entry.updateDate = DateUtil.parseUTCDateStr(entry.updateTimeStamp);
+                entry.topicIcon = Parser.parseImageUrl(entry.topicIcon);
             }
             return entries;
         }
