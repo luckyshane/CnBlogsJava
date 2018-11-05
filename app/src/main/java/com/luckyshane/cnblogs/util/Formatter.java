@@ -27,7 +27,10 @@ public class Formatter {
                 return "刚刚";
             } else if (deltaMillis <= ONE_HOUR_IN_MILLS) {
                 int mins = (int) (deltaMillis / ONE_MINUTE_IN_MILLS);
-                return String.format("%d分钟之前", mins);
+                return String.format("%d分钟前", mins);
+            } else if (deltaMillis <= ONE_DAY_IN_MILLS) {
+                int hours = (int) (deltaMillis / ONE_HOUR_IN_MILLS);
+                return String.format("%d小时前", hours);
             } else {
                 today.set(Calendar.HOUR_OF_DAY, 0);
                 today.set(Calendar.MINUTE, 0);
