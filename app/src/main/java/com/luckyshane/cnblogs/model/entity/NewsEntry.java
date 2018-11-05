@@ -3,6 +3,8 @@ package com.luckyshane.cnblogs.model.entity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.util.Date;
+
 @Root(name = "entry", strict = false)
 public final class NewsEntry {
     @Element(name = "id")
@@ -31,4 +33,9 @@ public final class NewsEntry {
 
     @Element(name = "sourceName")
     public String sourceName;
+
+    public Date publishDate;
+
+    public Date updateDate;
+
 }

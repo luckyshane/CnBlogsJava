@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.LogUtils;
 import com.luckyshane.cnblogs.R;
 import com.luckyshane.cnblogs.model.entity.NewsEntry;
+import com.luckyshane.cnblogs.util.Formatter;
 
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +47,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         holder.readCountTv.setText(String.format(Locale.CHINA, "阅读 · %d", entry.viewCount));
         holder.raiseCountTv.setText(String.format(Locale.CHINA, "点赞 · %d", entry.raiseCount));
         holder.commentCountTv.setText(String.format(Locale.CHINA, "评论 · %d", entry.commentCount));
+        holder.timeTv.setText(Formatter.formatDateCompareNow(entry.publishDate));
     }
 
     @Override

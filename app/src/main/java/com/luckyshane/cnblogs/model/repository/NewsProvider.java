@@ -4,6 +4,7 @@ import com.luckyshane.cnblogs.model.api.BlogApiClient;
 import com.luckyshane.cnblogs.model.entity.NewsContentResponse;
 import com.luckyshane.cnblogs.model.entity.NewsEntry;
 import com.luckyshane.cnblogs.model.entity.NewsResponse;
+import com.luckyshane.cnblogs.util.DateUtil;
 
 import java.util.List;
 
@@ -36,7 +37,12 @@ public class NewsProvider implements INewsProvider {
 
         @Override
         public List<NewsEntry> apply(NewsResponse newsResponse) throws Exception {
-            return newsResponse.newsEntryList;
+            List<NewsEntry> entries = newsResponse.newsEntryList;
+            for (NewsEntry entry : entries) {
+                entry.publishDate = DateUtil.parseUTCDateStr(entry.publishedTimeStamp);
+                entry.updateDate = DateUtil.parseUTCDateStr(entry.updateTimeStamp);
+            }
+            return entries;
         }
     }
 
