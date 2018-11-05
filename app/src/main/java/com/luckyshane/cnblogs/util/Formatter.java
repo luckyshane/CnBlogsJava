@@ -44,6 +44,8 @@ public class Formatter {
                     return "今天 " + TIME_FORMAT.format(timestamp);
                 } else if (day == 1) {
                     return "昨天 " + TIME_FORMAT.format(timestamp);
+                } else if (day == 2) {
+                    return "前天 " + TIME_FORMAT.format(timestamp);
                 }
             }
         }

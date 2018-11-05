@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Root(name = "entry", strict = false)
 public class BlogEntry implements Serializable {
@@ -42,6 +43,11 @@ public class BlogEntry implements Serializable {
      * 是否已经阅读过
      */
     public boolean isRead;
+
+    public Date publishDate;
+
+    public Date updateDate;
+
 
     @Override
     public String toString() {

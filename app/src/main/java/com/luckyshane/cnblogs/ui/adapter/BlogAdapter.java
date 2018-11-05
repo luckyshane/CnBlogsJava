@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.luckyshane.cnblogs.R;
 import com.luckyshane.cnblogs.model.entity.BlogEntry;
+import com.luckyshane.cnblogs.util.Formatter;
 import com.luckyshane.cnblogs.util.StringUtil;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull final BlogAdapter.ViewHolder holder, final int position) {
         BlogEntry entry = blogEntryList.get(position);
+        holder.timeTv.setText(Formatter.formatDateCompareNow(entry.publishDate));
         holder.titleTv.setText(StringUtil.getEmptyIfNull(entry.title));
         holder.titleTv.setTextColor(ContextCompat.getColor(context, entry.isRead ? R.color.text_read : R.color.text_normal));
         holder.summaryTv.setText(StringUtil.getEmptyIfNull(entry.summary));
@@ -70,6 +72,8 @@ public class BlogAdapter extends RecyclerView.Adapter<BlogAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.time_tv)
+        TextView timeTv;
         @BindView(R.id.title_tv)
         TextView titleTv;
         @BindView(R.id.summary_tv)
